@@ -1,3 +1,5 @@
+geometry: left=38mm, right=25mm, top=25mm, bottom=25mm, asymmetric
+
 Given: the following data sheet (abbreviated) containing transaction observations grouped by categorical variables of which those transactions are described by. Each observation (grouping) includes the number of those transactions that occured at each hour, and how many of those transactions were sucessful.
 
 Goal: Merchants started reporting customer complaints about failed transactions on Febury 14th, given data on the previous 48 hours, find out what happened. 
