@@ -1,6 +1,6 @@
 Given: the following data sheet (abbreviated) containing transaction observations grouped by categorical variables of which those transactions are described by. Each observation (grouping) includes the number of those transactions that occured at each hour, and how many of those transactions were sucessful.
 
-Goal: Something went wrong in the last 72 hours, find out what happened.
+Goal: Merchants started reporting customer complaints about failed transactions on Febury 14th, given data on the previous 48 hours, find out what happened. 
 
 <img width="1259" alt="386206442-2bd0532e-25c7-492a-b3cf-53e1e8297240" src="https://github.com/user-attachments/assets/91a3e897-2ff0-40ea-aab9-697aa93aed8c">
 
