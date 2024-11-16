@@ -250,8 +250,8 @@ There are tons of plots that can be produced here but only one has a meaningful 
 
 Question: Could have this anomaly been predicted before it occurred? 
 
-1.) The node on the left is the distribution of failure rates of the anomalous subset of data before and after the anomaly 
-2.) The node on the right is the distribution of failure rates of the anomalous subset of data during the anomaly
+* 1.) The node on the left is the distribution of failure rates of the anomalous subset of data before and after the anomaly 
+* 2.) The node on the right is the distribution of failure rates of the anomalous subset of data during the anomaly
 
 Therefore, these are two distinct distributions representing two distinct processes. Something happened which caused this mean shift that could not have been predicted from the data before the anamoly. 
 
