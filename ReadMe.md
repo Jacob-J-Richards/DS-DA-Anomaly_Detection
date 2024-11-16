@@ -43,7 +43,8 @@ panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), pane
 legend.position = "none"); ggsave("percent_failed_before.png", plot = last_plot(), width = 10, height = 6, dpi = 300)
 ```
 
-![](Exam_2_restart_Nov_16_636AM_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+![percent_failed_prelim](https://github.com/user-attachments/assets/810910d9-7b10-42ac-ae60-197fc0089c2c)
 
 
 
@@ -61,8 +62,8 @@ plot.background = element_rect(fill = "white", color = NA),panel.background = el
 panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), 
 legend.position = "none")
 ```
+![percent_count_prelim](https://github.com/user-attachments/assets/d9a09a24-65ab-4b86-b166-1573b55a585a)
 
-![](Exam_2_restart_Nov_16_636AM_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 ggsave("806.png", plot = last_plot(), width = 10, height = 6, dpi = 300)
@@ -110,12 +111,7 @@ ggplot(data = failed_transactions, aes(x = x_index, y = failedTransactions)) + g
   panel.background = element_rect(fill = "white", color = NA), panel.grid.major.x = element_blank(),  
   panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), legend.position = "none")
 ```
-
-![](Exam_2_restart_Nov_16_636AM_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
-
-``` r
-  ggsave("failure_percent_by_category_combination.png", plot = last_plot(), width = 10, height = 6, dpi = 300)
-```
+![failure_percent_isolated_Anamoly](https://github.com/user-attachments/assets/fc7f4ee5-5190-47cc-ba4b-4a1578035d1c)
 
 
 
@@ -150,8 +146,8 @@ ggplot(data = long_set_failures_by_merchant,
   labs(title = "Failure Rates Before and During Anomaly by Merchant",
   x = "Period", y = "Failure Rate") +theme_minimal()
 ```
+![Merchants_effected_plot](https://github.com/user-attachments/assets/ff914a7b-960e-474c-b619-75ff7e291fa1)
 
-![](Exam_2_restart_Nov_16_636AM_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 library(gt); gt_table <- entire_set_failures_by_merchant %>% gt() %>%
@@ -164,6 +160,7 @@ tab_options(table.font.size = "small", table.width = pct(80), heading.align = "c
 data_color(columns = Failure_Rate_Difference, colors = scales::col_numeric(palette = c("lightblue", "red"), domain = NULL)); gt_table
 ```
 
+![Merchants_effected_table](https://github.com/user-attachments/assets/e1859ee5-558a-4ba7-9e58-e591e9e6718a)
 
 
 
@@ -201,15 +198,15 @@ long <- melt(data = wide, id.vars = c("hours"), measured.vars = c("proportion_c"
 ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_smooth() + labs(title="smoothed failure percentage curve") 
 ```
 
+![failure_percent_Anamoly_vs_rest_smooth](https://github.com/user-attachments/assets/b8a4740b-e299-4a23-8312-b5bf514d2f74)
 
-![](Exam_2_restart_Nov_16_636AM_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+
 
 ``` r
 ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_line() + labs(title="failure percentage line, Figure 1.0")
 ```
 
-![](Exam_2_restart_Nov_16_636AM_files/figure-html/unnamed-chunk-11-2.png)<!-- -->
-
+![failure_percent_Anamoly_vs_rest_line](https://github.com/user-attachments/assets/3937eec7-c4a9-49c7-b173-be8182863e40)
 
 
 ``` r
@@ -217,7 +214,7 @@ ggplot(data=wide,aes(proportion_subset)) + geom_density(fill="blue",alpha=0.20) 
   labs(title = "Anomalous Data Failure Rate Density",xlab="Failure Rate",ylab="Density")
 ```
 
-![](Exam_2_restart_Nov_16_636AM_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![Anamoly_failure_rate_density](https://github.com/user-attachments/assets/56dc7fba-82a6-44c1-bfc5-1e809f9a9248)
 
 
 There are tons of plots that can be produced here but only one has a meaningful implication. 
