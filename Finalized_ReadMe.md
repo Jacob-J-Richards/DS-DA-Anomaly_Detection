@@ -97,31 +97,24 @@ original_observations_found_anomalous <- data_original[rownames(filtered_data),]
 ```
 ![Anomalous Observations Table](https://github.com/user-attachments/assets/524fc9a1-d06b-44e2-83f6-8b622f52cc56)
 
-### Observations
+## Pattern In The Anamoly Detection Results
 
-These are the observations the anomaly detection model found to be the most abnormal. The exact combination of variables present in these observations is not the anomaly because if you plot the failure rate of:
-
-```r
-paytm_subset <- data[(data[,5] %in% c("PAYTM", "PAYTM_V2", "PAYTM_UPI", "notprovided")) & (data[,6] %in% c("UPI_PAY")) & (data[,4] == "UPI"),]
-```
-You just get white noise.
+All the observations returned by the anomaly detection method, had one of the PAYTM service as their payment gateway (`pg`), and most had UPI_PAY as it's sub-type but not all. From that, I deduced that the anomaly would be in all of the PAYTM payment gateways but not in UPI_PAY because if you plot that combination you get the following result.
 
 ![White Noise](https://github.com/user-attachments/assets/00bd4cfe-e04f-438f-8764-2d8f8d077352)
 
----
-
-## Key Findings
-
-However, for all the observations returned by the anomaly detection method, all of them have a PAYTM service as their payment gateway (`pg`). From that, I deduced that the anomaly would be in any of the PAYTM gateways, but not in the subtype "UPI_PAY". After about 10 tries of plotting different combinations of categories that satisfied this criterion, the following was found:
+After about 10 tries of plotting different combinations of categories that satisfied these conditions, the following was found:
 
 ```r
 paytm_subset <- data[(data[,5] %in% c("PAYTM", "PAYTM_V2", "PAYTM_UPI", "notprovided")) & (data[,6] %in% c("UPI_COLLECT")) & (data[,4] == "UPI"),]
 ```
+
 ![Failure Percent Isolated Anomaly](https://github.com/user-attachments/assets/fc7f4ee5-5190-47cc-ba4b-4a1578035d1c)
+
 
 This combination of UPI and PAYTM services produced an 80% failure rate from February 13th, 6 PM to February 14th, 9 AM. The combination being:
 - **Payment Method:** UPI
-- **Payment Gateway:** PAYTM (or its variants)
+- **Payment Gateway:** PAYTM or PAYTM_V2 or PAYTM_UPI or "NA"
 - **Sub-Type:** UPI_COLLECT
 
 ---
@@ -138,6 +131,7 @@ subset_failures_by_merchant <- failure_sum_by_merchant; data$failures <- data[,1
 ```
 
 ![Merchant Impact Plot](https://github.com/user-attachments/assets/ff914a7b-960e-474c-b619-75ff7e291fa1)
+![Merchants_effected_table](https://github.com/user-attachments/assets/e1859ee5-558a-4ba7-9e58-e591e9e6718a)
 
 ---
 
@@ -157,11 +151,15 @@ proportion_c <- f / t[,2] * 100
 
 ![Failure Percentage Curve](https://github.com/user-attachments/assets/b8a4740b-e299-4a23-8312-b5bf514d2f74)
 
+![failure_percent_Anamoly_vs_rest_line](https://github.com/user-attachments/assets/3937eec7-c4a9-49c7-b173-be8182863e40)
+
 ---
 
 ## Conclusion
 
 There are tons of plots that can be produced here, but only one has meaningful implications.
+
+![Anamoly_failure_rate_density](https://github.com/user-attachments/assets/56dc7fba-82a6-44c1-bfc5-1e809f9a9248)
 
 **Question:** Could this anomaly have been predicted before it occurred?  
 - These are two distinct distributions representing two distinct processes. Something happened which caused this mean shift that could not have been predicted from the data before the anomaly.
