@@ -11,13 +11,7 @@ setwd("/Users/jacobrichards/Desktop/DS assesment/DS_exam_2")
 #setwd("C:/Users/jake pc/Desktop/exam_2_restart")
 transactions <- read.csv(file="trans.csv", na.strings = c("", "NA"))
 transactions[is.na(transactions)] <- "notprovided"
-data <- transactions
-colnames(data) <- c("t","s","mid","pmt","pg","subtype","hr","bank")
-weighted_failure_rate <- numeric(nrow(data))
-weighted_failure_rate <- data[,1] - data[,2] / data[,1] * log(1+data[,1])
-data$weighted <- weighted_failure_rate; data_original <- data 
 ```
-
 
 
 ``` r
@@ -33,7 +27,7 @@ unique_hours <- unique(data$hr)
 unique_hours <- sort(unique_hours)
 ```
 
-
+Initial investigation by plotting failed transaction rate by hour. 
 
 ``` r
 failed_transactions_rate <- data.frame(hours = unique_hours, failedTransactions = failure_rate, x_index = seq(1, 72, by = 1))
@@ -52,7 +46,7 @@ legend.position = "none"); ggsave("percent_failed_before.png", plot = last_plot(
 
 ![percent_failed_prelim](https://github.com/user-attachments/assets/810910d9-7b10-42ac-ae60-197fc0089c2c)
 
-
+Initial investigation by plotting failed transaction count by hour. 
 
 ``` r
 failed_transactions <- data.frame(hours = unique_hours, failedTransactions = failure_count, x_index = seq(1, 72, by = 1))
@@ -70,8 +64,16 @@ legend.position = "none")
 ```
 ![percent_count_prelim](https://github.com/user-attachments/assets/d9a09a24-65ab-4b86-b166-1573b55a585a)
 
+There isn't really anything to go off from these plots so we're going to try an anamoly detection method. 
 
-Anamoly detection Method 
+```{r}
+data <- transactions
+colnames(data) <- c("t","s","mid","pmt","pg","subtype","hr","bank")
+weighted_failure_rate <- numeric(nrow(data))
+weighted_failure_rate <- data[,1] - data[,2] / data[,1] * log(1+data[,1])
+data$weighted <- weighted_failure_rate; data_original <- data 
+```
+Appending a weighted failure rate to each observation, which is simply the failure rate of the observation multiplied by log(1+transactions), so that observations with more trasactions have more signifigance than another observation with equal failure rate but fewer transactions. 
 
 ``` r
 data$pmt <- as.numeric(as.factor(data$pmt)); data$pg <- as.numeric(as.factor(data$pg))
@@ -92,7 +94,20 @@ original_observations_found_anamolous; data <- data_original
 ![Anamaly_observations_table](https://github.com/user-attachments/assets/524fc9a1-d06b-44e2-83f6-8b622f52cc56)
 
 
-There is definetly something happening with UPI and PAYTM services.
+These are the observations the anamoly detection model found to be the most abnormal. You can tell that the exact combination of variables present in these observations is not the anamoly because if you plot the failure rate of 
+
+```{r}
+paytm_subset <- data[(data[,5] %in% c("PAYTM", "PAYTM_V2", "PAYTM_UPI", "notprovided")) & (data[,6] %in% c("UPI_PAY")) & (data[,4] == "UPI"),]
+```
+
+You just get white noise. 
+
+![testettjjf320](https://github.com/user-attachments/assets/00bd4cfe-e04f-438f-8764-2d8f8d077352)
+
+However, for all of the observations returned by the anamoly detection method, all of them have a PAYTM service as it's payment gateway (pg). 
+
+From that I duduced that the anamoly would be in any of the PAYTM gateways, but not in the subtype "UPI_PAY". After about 10 tries of plotting different combinations of categories which satisfied this criteria, the following was found. 
+
 
 ``` r
 paytm_subset <- data[(data[,5] %in% c("PAYTM", "PAYTM_V2", "PAYTM_UPI", "notprovided")) & (data[,6] %in% c("UPI_COLLECT")) & (data[,4] == "UPI"),]
@@ -118,7 +133,11 @@ ggplot(data = failed_transactions, aes(x = x_index, y = failedTransactions)) + g
 ```
 ![failure_percent_isolated_Anamoly](https://github.com/user-attachments/assets/fc7f4ee5-5190-47cc-ba4b-4a1578035d1c)
 
-By trial and error, I found this combination of UPI and PAYTM services that produces a 80% failure rate from Febuary 13th 6PM to Febuary 14th 9AM. payment method: UPI payment gateway: PAYTM or PAYTM_V2 or PAYTM_UPI sub-type: UPI_COLLECT
+This combination of UPI and PAYTM services produced a 80% failure rate from Febuary 13th 6PM to Febuary 14th 9AM. 
+The combination being: (payment method: UPI, payment gateway: PAYTM or PAYTM_V2 or PAYTM_UPI, sub-type: UPI_COLLECT).
+
+
+To see how the individual merchants were impacted, the failure rates before and during the anamoly we compared for each merchant. 
 
 ``` r
 paytm_subset <- data[(data[,5] %in% c("PAYTM", "PAYTM_V2", "PAYTM_UPI", "notprovided")) & (data[,6] %in% c("UPI_COLLECT")) & (data[,4] == "UPI"),]
@@ -153,6 +172,7 @@ ggplot(data = long_set_failures_by_merchant,
 ```
 ![Merchants_effected_plot](https://github.com/user-attachments/assets/ff914a7b-960e-474c-b619-75ff7e291fa1)
 
+Only one of the merchants was not not effected. 
 
 ``` r
 library(gt); gt_table <- entire_set_failures_by_merchant %>% gt() %>%
@@ -168,9 +188,9 @@ data_color(columns = Failure_Rate_Difference, colors = scales::col_numeric(palet
 ![Merchants_effected_table](https://github.com/user-attachments/assets/e1859ee5-558a-4ba7-9e58-e591e9e6718a)
 
 
+Clearly, fan fight was effected the worst. 
 
-All of the merchants were effected except UrbanClap. 
-
+Plotting the failure rates for the categories of observations in which the anamoly happened and the failure rates for the remainder of the data set where the anamoly is not clearly associated with. 
 
 ``` r
 paytm_subset <- data[(data[,5] %in% c("PAYTM", "PAYTM_V2", "PAYTM_UPI", "notprovided")) & (data[,6] %in% c("UPI_COLLECT")) & (data[,4] == "UPI"),]
@@ -203,15 +223,15 @@ long <- melt(data = wide, id.vars = c("hours"), measured.vars = c("proportion_c"
 ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_smooth() + labs(title="smoothed failure percentage curve") 
 ```
 
-Comparing the curves of the failure rates for that subset of the data in which the anamoly occured and the remainder of it. 
+You can see the failure rate of the anamoly and un-effected data set are relatively close until the shift happens.
 
 ![failure_percent_Anamoly_vs_rest_smooth](https://github.com/user-attachments/assets/b8a4740b-e299-4a23-8312-b5bf514d2f74)
-
 
 
 ``` r
 ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_line() + labs(title="failure percentage line, Figure 1.0")
 ```
+The variance of the anamoly curve is very high compaired to the un-effected data, but this is just from the anamoly only having a sample size of 500 and and the rest of the data having 19,000 samples. 
 
 ![failure_percent_Anamoly_vs_rest_line](https://github.com/user-attachments/assets/3937eec7-c4a9-49c7-b173-be8182863e40)
 
@@ -231,12 +251,9 @@ There are tons of plots that can be produced here but only one has a meaningful 
 Question: Could have this anomaly been predicted before it occurred? 
 
 1.) The node on the left is the distribution of failure rates of the anomalous subset of data before and after the anomaly 
-
 2.) The node on the right is the distribution of failure rates of the anomalous subset of data during the anomaly
 
-3.) these are two district distributions representing two distinct processes.
-
-Therefore, real life process of which this data set is a collection of measurements on changed around February 13th 6PM and reverted back to it's original state around February 14th 9AM.
+Therefore, these are two distinct distributions representing two distinct processes. Something happened which caused this mean shift that could not have been predicted from the data before the anamoly. 
 
 
 
