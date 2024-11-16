@@ -1,3 +1,9 @@
+Given: the following data sheet (abbreviated) containing transaction observations grouped by categorical variables of which those transactions are described by. Each observation (grouping) includes the number of those transactions that occured at each hour, and how many of those transactions were sucessful.
+
+Goal: Something went wrong in the last 72 hours, find out what happened.
+
+<img width="1259" alt="386206442-2bd0532e-25c7-492a-b3cf-53e1e8297240" src="https://github.com/user-attachments/assets/91a3e897-2ff0-40ea-aab9-697aa93aed8c">
+
 
 ``` r
 library('ggplot2')
@@ -65,11 +71,7 @@ legend.position = "none")
 ![percent_count_prelim](https://github.com/user-attachments/assets/d9a09a24-65ab-4b86-b166-1573b55a585a)
 
 
-``` r
-ggsave("806.png", plot = last_plot(), width = 10, height = 6, dpi = 300)
-```
-
-
+Anamoly detection Method 
 
 ``` r
 data$pmt <- as.numeric(as.factor(data$pmt)); data$pg <- as.numeric(as.factor(data$pg))
@@ -87,7 +89,10 @@ filtered_data <- filtered_data[order(filtered_data$mahalanobis_score, decreasing
 original_observations_found_anamolous <- data_original[rownames(filtered_data),]
 original_observations_found_anamolous; data <- data_original
 ```
+![Anamaly_observations_table](https://github.com/user-attachments/assets/524fc9a1-d06b-44e2-83f6-8b622f52cc56)
 
+
+There is definetly something happening with UPI and PAYTM services.
 
 ``` r
 paytm_subset <- data[(data[,5] %in% c("PAYTM", "PAYTM_V2", "PAYTM_UPI", "notprovided")) & (data[,6] %in% c("UPI_COLLECT")) & (data[,4] == "UPI"),]
@@ -113,7 +118,7 @@ ggplot(data = failed_transactions, aes(x = x_index, y = failedTransactions)) + g
 ```
 ![failure_percent_isolated_Anamoly](https://github.com/user-attachments/assets/fc7f4ee5-5190-47cc-ba4b-4a1578035d1c)
 
-
+By trial and error, I found this combination of UPI and PAYTM services that produces a 80% failure rate from Febuary 13th 6PM to Febuary 14th 9AM. payment method: UPI payment gateway: PAYTM or PAYTM_V2 or PAYTM_UPI sub-type: UPI_COLLECT
 
 ``` r
 paytm_subset <- data[(data[,5] %in% c("PAYTM", "PAYTM_V2", "PAYTM_UPI", "notprovided")) & (data[,6] %in% c("UPI_COLLECT")) & (data[,4] == "UPI"),]
@@ -198,6 +203,8 @@ long <- melt(data = wide, id.vars = c("hours"), measured.vars = c("proportion_c"
 ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_smooth() + labs(title="smoothed failure percentage curve") 
 ```
 
+Comparing the curves of the failure rates for that subset of the data in which the anamoly occured and the remainder of it. 
+
 ![failure_percent_Anamoly_vs_rest_smooth](https://github.com/user-attachments/assets/b8a4740b-e299-4a23-8312-b5bf514d2f74)
 
 
@@ -213,6 +220,8 @@ ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_f
 ggplot(data=wide,aes(proportion_subset)) + geom_density(fill="blue",alpha=0.20) + theme_minimal() + 
   labs(title = "Anomalous Data Failure Rate Density",xlab="Failure Rate",ylab="Density")
 ```
+
+Then here is where we get to the bottom of it 
 
 ![Anamoly_failure_rate_density](https://github.com/user-attachments/assets/56dc7fba-82a6-44c1-bfc5-1e809f9a9248)
 
