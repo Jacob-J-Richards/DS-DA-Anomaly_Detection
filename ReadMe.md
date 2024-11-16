@@ -239,9 +239,6 @@ Question: Could have this anomaly been predicted before it occurred?
 Therefore, real life process of which this data set is a collection of measurements on changed around February 13th 6PM and reverted back to it's original state around February 14th 9AM.
 
 
-``` r
-Note for the future: no one helped you with this, you figured this out on your own. The only clue you had was you saw Figure 1.0 produced by someone else on discord with no indication of where it came from other than it was the result of the combination of categorical variables. 
-```
 
 
 
