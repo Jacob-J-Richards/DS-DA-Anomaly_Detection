@@ -1,13 +1,3 @@
----
-title: "Anamoly Detection"
-output:
-  html_document: 
-    keep_md: true
-  pdf_document: default
-geometry: margin=0.10in
-date: "2024-11-13"
----
-
 
 ``` r
 library('ggplot2')
