@@ -103,6 +103,8 @@ All the observations returned by the anomaly detection method, had one of the PA
 
 ![White Noise](https://github.com/user-attachments/assets/00bd4cfe-e04f-438f-8764-2d8f8d077352)
 
+Which is just white noise.
+
 After about 10 tries of plotting different combinations of categories that satisfied these conditions, the following was found:
 
 ```r
@@ -162,4 +164,5 @@ There are tons of plots that can be produced here, but only one has meaningful i
 ![Anamoly_failure_rate_density](https://github.com/user-attachments/assets/56dc7fba-82a6-44c1-bfc5-1e809f9a9248)
 
 **Question:** Could this anomaly have been predicted before it occurred?  
-- These are two distinct distributions representing two distinct processes. Something happened which caused this mean shift that could not have been predicted from the data before the anomaly.
+
+- No, the probability density curve of the anomalous data set contains two distinct normal distributions within it on the left and the right. The one of the left is from before and after the anamoly event, and the one on the right is during the anamoly. Thus before the event occured you would have no statistical evidence as you were obtaining no samples for a distribution that was anamolous.
