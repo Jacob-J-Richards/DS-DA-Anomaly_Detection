@@ -145,4 +145,4 @@ There are tons of plots that can be produced here, but only one has meaningful i
 
 **Question:** Could this anomaly have been predicted before it occurred?  
 
-- No, the probability density curve of the anomalous data set contains two distinct normal distributions within it on the left and the right. The one of the left is from before and after the anamoly event, and the one on the right is during the anamoly. Thus before the event occured you would have no statistical evidence as you were obtaining no samples for a distribution that was anamolous.
+No, the probability density curve of the anomalous data set contains two distinct normal distributions within it on the left and the right. The one of the left is from before and after the anamoly event, and the one on the right is during the anamoly. Thus, before the event occured you would have no statistical evidence of anything abnormal as you were obtaining no samples for a distribution that was anamolous.
