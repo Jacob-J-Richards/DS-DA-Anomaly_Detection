@@ -37,29 +37,10 @@ unique_hours <- sort(unique_hours)
 ## Initial Investigation
 
 ### Failed Transaction Rate by Hour
-
-```r
-failed_transactions_rate <- data.frame(hours = unique_hours, failedTransactions = failure_rate, x_index = seq(1, 72, by = 1))
-ggplot(data = failed_transactions_rate, aes(x = x_index, y = failedTransactions)) + 
-  geom_area(fill = "blue", alpha = 0.25) + geom_line(color = "black") +  
-  scale_x_continuous(breaks = seq(1, 72, by = 6), minor_breaks = 1:72, labels = unique_hours[seq(1, length(unique_hours), by = 6)]) + 
-  coord_cartesian(ylim = range(failed_transactions_rate$failedTransactions, na.rm = TRUE)) +  
-  labs(title = "Failed Transactions Percentage by Hour", x = "Hour (72)", y = "Failed Transactions Per Hour") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8))
-```
 ![Percent Failed Preliminary](https://github.com/user-attachments/assets/810910d9-7b10-42ac-ae60-197fc0089c2c)
 
 ### Failed Transaction Count by Hour
 
-```r
-failed_transactions <- data.frame(hours = unique_hours, failedTransactions = failure_count, x_index = seq(1, 72, by = 1))
-ggplot(data = failed_transactions, aes(x = x_index, y = failedTransactions)) + 
-  geom_area(fill = "blue", alpha = 0.25) + geom_line(color = "black") +  
-  scale_x_continuous(breaks = seq(1, 72, by = 6), minor_breaks = 1:72, labels = unique_hours[seq(1, length(unique_hours), by = 6)]) + 
-  coord_cartesian(ylim = range(failed_transactions$failedTransactions, na.rm = TRUE)) +  
-  labs(title = "Failed Transactions Counts by Hour", x = "Hour (72)", y = "Failed Transactions Per Hour") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8))
-```
 ![Percent Count Preliminary](https://github.com/user-attachments/assets/d9a09a24-65ab-4b86-b166-1573b55a585a)
 
 ---
@@ -75,7 +56,6 @@ weighted_failure_rate <- numeric(nrow(data))
 weighted_failure_rate <- data[,1] - data[,2] / data[,1] * log(1 + data[,1])
 data$weighted <- weighted_failure_rate; data_original <- data 
 ```
-
 Appending a weighted failure rate to each observation, which is simply the failure rate of the observation multiplied by `log(1 + transactions)`, so that observations with more transactions have more significance than another observation with equal failure rate but fewer transactions.
 
 ### Mahalanobis Distance
