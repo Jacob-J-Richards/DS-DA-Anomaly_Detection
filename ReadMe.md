@@ -130,10 +130,11 @@ f <- t[,2] - s[,2]
 
 proportion_c <- f / t[,2] * 100
 ```
+![revised_failure_smooth_curve](https://github.com/user-attachments/assets/f6362a69-0056-4a08-aa7c-e07984d768b3)
 
-![Failure Percentage Curve](https://github.com/user-attachments/assets/b8a4740b-e299-4a23-8312-b5bf514d2f74)
+![revised_failure_line_1](https://github.com/user-attachments/assets/4e5f99ca-4347-4f29-9711-b4077246d3dd)
 
-![failure_percent_Anamoly_vs_rest_line](https://github.com/user-attachments/assets/3937eec7-c4a9-49c7-b173-be8182863e40)
+
 
 ---
 
