@@ -11,8 +11,8 @@ date: "2024-11-13"
 ```{r}
 library('ggplot2')
 #setwd("/Users/jacobrichards/Desktop/DS assesment/DS_exam_2")
-setwd("C:/Users/jake pc/Desktop/Anamoly_Detection")
-transactions <- read.csv(file="trans.csv", na.strings = c("", "NA"))
+setwd("/Users/jacobrichards/Desktop/DS-DA-Anomaly_Detection")
+transactions <- read.csv(file="transactions.csv", na.strings = c("", "NA"))
 transactions[is.na(transactions)] <- "notprovided"
 data <- transactions
 colnames(data) <- c("t","s","mid","pmt","pg","subtype","hr","bank")
@@ -181,8 +181,10 @@ hours <- seq(1,72,1); wide <- as.data.frame(cbind(hours,proportion_c,proportion_
 
 long <- melt(data = wide, id.vars = c("hours"), measured.vars = c("proportion_c", "proportion_subset"), variable.name = "percentage_failure")
 
-ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_smooth() + labs(title="smoothed failure percentage curve") 
-ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_line() + labs(title="failure percentage line, Figure 1.0")
+ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_smooth() + labs(title="Smoothed Failure Percentage Curve",ylab="Percentage")  + 
+  scale_color_discrete(labels = c("Non-Anamous Data", "Anamous Data")) 
+ggplot(data=long,aes(x=hours,y=value,group=percentage_failure,color=percentage_failure)) + geom_line() + labs(title="Failure Percentage Line",ylab="Percentage") + 
+  scale_color_discrete(labels = c("Non-Anamous Data", "Anamous Data")) 
 ```
 
 
